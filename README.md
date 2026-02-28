@@ -52,23 +52,13 @@ PAS/
 
 ```bash
 # Run a single scenario
-pas_runner.exe --scenario scenarios/persistence/T1053.005_scheduled_task.yml --vendor CrowdStrike
+pas_runner.exe --scenario /Path to scenarios/persistence/T1053.005_scheduled_task.yml --vendor CrowdStrike
 
 # Run a full suite
-pas_runner.exe --suite scenarios/suites/edr_eval_v1.yml --vendor SentinelOne --out results/
+pas_runner.exe --suite /Path to scenarios/suites/edr_eval_v1.yml --vendor SentinelOne --out results/
 
 # Dry run (print steps, don't execute)
-pas_runner.exe --suite scenarios/suites/edr_eval_v1.yml --dry-run
-```
-
----
-
-## Build
-
-```bash
-cd runner
-dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true
-# Output: runner/bin/Release/net8.0/win-x64/publish/pas_runner.exe
+pas_runner.exe --suite /Path to scenarios/suites/edr_eval_v1.yml --dry-run
 ```
 
 ---
@@ -77,10 +67,12 @@ dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=
 
 1. Set up two clean VMs — identical OS, same Sysmon config, different EDR
 2. Copy the full `PAS/` folder to each
-3. Run: `pas_runner.exe --suite scenarios/suites/edr_eval_v1.yml --vendor <VendorName>`
+3. Run: `pas_runner.exe --suite /Path to scenarios/suites/edr_eval_v1.yml --vendor <VendorName>`
 4. After each scenario, check EDR console and SIEM for the events in the analyst checklist
 5. Populate `vendor_results` in the result JSON manually (detected/blocked/notes)
 6. Compare `results/` across vendors — your evaluation matrix
+
+***Note: --vendor is not mandatory, just for tagging what vendor or SIEM you are evaluating or working on
 
 ---
 
@@ -103,7 +95,9 @@ Copy any existing YAML and modify. Step types available:
 
 ## Sigma Rule Scaffold (manual, after testing)
 
-After running a scenario and finding the relevant events, use this template:
+(For detection engineering) After running a scenario and finding the relevant events, use this template: 
+
+If you use Sigma, you can use pySigma to convert it to your SIEM rule of choice or not
 
 ```yaml
 title: <Behavior Name>
